@@ -1,10 +1,13 @@
 /* ChatbotApp.css */
+
+/* General container styling */
 .container {
     font-family: Arial, sans-serif;
     text-align: center;
     padding: 20px;
   }
   
+  /* Header styling */
   .header {
     background-color: #4CAF50;
     padding: 10px;
@@ -15,6 +18,7 @@
     margin: 0;
   }
   
+  /* Input section styling */
   .inputSection {
     margin-top: 20px;
   }
@@ -24,6 +28,8 @@
     padding: 10px;
     font-size: 16px;
     margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
   }
   
   .submitButton {
@@ -32,9 +38,16 @@
     background-color: #4CAF50;
     color: white;
     border: none;
+    border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.2s;
   }
   
+  .submitButton:hover {
+    background-color: #45a049;
+  }
+  
+  /* Random questions section styling */
   .questionsSection {
     margin-top: 20px;
   }
@@ -62,5 +75,22 @@
   
   .suggestionItem:hover {
     background-color: #f1f1f1;
+  }
+  
+  /* Response section styling */
+  .responseSection {
+    margin-top: 20px;
+  }
+  
+  .responseBox {
+    margin: 10px auto;
+    padding: 15px;
+    width: 60%;
+    background-color: #f1f1f1;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: left;
+    font-size: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   
