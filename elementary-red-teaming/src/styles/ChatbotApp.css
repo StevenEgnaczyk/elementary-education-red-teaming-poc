@@ -1,0 +1,66 @@
+/* ChatbotApp.css */
+.container {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .header {
+    background-color: #4CAF50;
+    padding: 10px;
+    color: white;
+  }
+  
+  .title {
+    margin: 0;
+  }
+  
+  .inputSection {
+    margin-top: 20px;
+  }
+  
+  .inputField {
+    width: 80%;
+    padding: 10px;
+    font-size: 16px;
+    margin: 10px 0;
+  }
+  
+  .submitButton {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .questionsSection {
+    margin-top: 20px;
+  }
+  
+  .suggestionsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .suggestionItem {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin: 5px 0;
+    width: 60%;
+    text-align: left;
+    cursor: pointer;
+    font-size: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s;
+  }
+  
+  .suggestionItem:hover {
+    background-color: #f1f1f1;
+  }
+  
