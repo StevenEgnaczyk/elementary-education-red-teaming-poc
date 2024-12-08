@@ -1,24 +1,64 @@
 import React, { useState, useEffect } from "react";
 import Papa from "papaparse";
-import '../styles/ChatbotApp.css'; // Import the CSS file
+import '../styles/ChatbotApp.css';
 
+// Typewriter effect for the responses
+const TypewriterText = ({ text }) => {
+
+  const [displayText, setDisplayText] = useState("");
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Effect to animate the text
+  useEffect(() => {
+    if (!text) {
+      setDisplayText("");
+      setCurrentIndex(0);
+      return;
+    }
+
+    // If the text is not empty, animate it
+    if (currentIndex < text.length) {
+      const timer = setTimeout(() => {
+        setDisplayText(prev => prev + text[currentIndex]);
+        setCurrentIndex(prev => prev + 1);
+      }, 10);
+
+      return () => clearTimeout(timer);
+    }
+  }, [text, currentIndex]);
+
+  // Reset animation when text changes
+  useEffect(() => {
+    if (text) {
+      setDisplayText("");
+      setCurrentIndex(0);
+    }
+  }, [text]);
+
+  return <p>{displayText}</p>;
+};
+
+// Main component for the chatbot
 const ChatbotApp = () => {
+
   const [csvData, setCsvData] = useState([]); // Store the entire CSV data
   const [randomQuestions, setRandomQuestions] = useState([]); // Store random questions
   const [userInput, setUserInput] = useState(""); // Store user input
   const [response, setResponse] = useState(""); // Store the response to display
+  const [adultResponse, setAdultResponse] = useState(""); // Store the adult response
+  const [childResponse, setChildResponse] = useState(""); // Store the child response
 
   // Function to load CSV data
   useEffect(() => {
-    const csvFilePath = "/Questions_Adult_Child_Responses.csv"; // Ensure this file is in the 'public' folder
+    const csvFilePath = "/Questions_Adult_Child_Responses.csv";
     Papa.parse(csvFilePath, {
       download: true,
       header: true,
       complete: (results) => {
-        setCsvData(results.data); // Save the entire CSV data
-        const allQuestions = results.data.map((row) => row.Question).filter(Boolean); // Ensure no empty questions
+        setCsvData(results.data);
+        const allQuestions = results.data.map((row) => row.Question).filter(Boolean);
         if (allQuestions.length > 0) {
-          loadRandomQuestions(allQuestions); // Load random questions on load
+          loadRandomQuestions(allQuestions);
         } else {
           console.error("No questions found in the CSV file.");
         }
@@ -43,24 +83,41 @@ const ChatbotApp = () => {
 
   // Function to handle submit
   const handleSubmit = () => {
-    // Find the row in CSV data that matches the user's input
     const matchedRow = csvData.find((row) => row.Question === userInput);
     if (matchedRow) {
-      // Randomly choose between Column 2 (Answer to an Adult) and Column 3 (Answer to a Child)
-      const columns = ["Answer to an Adult", "Answer to a Child"];
-      const randomColumn = columns[Math.floor(Math.random() * columns.length)];
-      setResponse(matchedRow[randomColumn] || "Response not available.");
+      setAdultResponse(matchedRow["Answer to an Adult"] || "Response not available.");
+      setChildResponse(matchedRow["Answer to a Child"] || "Response not available.");
     } else {
-      setResponse("Sorry, I don't understand that question.");
+      setAdultResponse("Sorry, I don't understand that question.");
+      setChildResponse("Sorry, I don't understand that question.");
     }
   };
 
   return (
     <div className="container">
-      {/* Header */}
       <header className="header">
         <h1 className="title">Child-Friendly Chatbot</h1>
       </header>
+
+      {/* Random Questions Section */}
+      <section className="questionsSection">
+        <h2>Suggestions:</h2>
+        <div className="suggestionsContainer">
+          {randomQuestions.length > 0 ? (
+            randomQuestions.map((question, index) => (
+              <div
+                key={index}
+                className="suggestionItem"
+                onClick={() => handleQuestionClick(question)}
+              >
+                {question}
+              </div>
+            ))
+          ) : (
+            <p>Loading questions...</p>
+          )}
+        </div>
+      </section>
 
       {/* User Input Section */}
       <section className="inputSection">
@@ -77,32 +134,21 @@ const ChatbotApp = () => {
         </button>
       </section>
 
-      {/* Response Section */}
+      {/* Response Section with Two Boxes */}
       <section className="responseSection">
-        {response && (
-          <div className="responseBox">
-            <p>{response}</p>
+        <div className="responsesContainer">
+          <div className="responseColumn adult">
+            <h3>Adult Response</h3>
+            <div className="responseBox adult-box">
+              <TypewriterText text={adultResponse} />
+            </div>
           </div>
-        )}
-      </section>
-
-      {/* Random Questions Section */}
-      <section className="questionsSection">
-        <h2>Suggestions:</h2>
-        <div className="suggestionsContainer">
-          {randomQuestions.length > 0 ? (
-            randomQuestions.map((question, index) => (
-              <div
-                key={index}
-                className="suggestionItem"
-                onClick={() => handleQuestionClick(question)} // Add click handler
-              >
-                {question}
-              </div>
-            ))
-          ) : (
-            <p>Loading questions...</p>
-          )}
+          <div className="responseColumn child">
+            <h3>Child Response</h3>
+            <div className="responseBox child-box">
+              <TypewriterText text={childResponse} />
+            </div>
+          </div>
         </div>
       </section>
     </div>
